@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- <link rel="stylesheet" href="bootstrap.min.css"> -->
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            window.languagePluginUrl = 'https://cdn.jsdelivr.net/pyodide/v0.15.0/full/';
+        </script>
+        <script src="https://cdn.jsdelivr.net/pyodide/v0.15.0/full/pyodide.js"></script>
+        
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.css"/> -->
+        <style>
+            /* p{
+            color: red;
+            } */
+            /*.ML_tr{
+                background-color: rgba(255, 0, 0, 0.692);
+            }*/
+            #textfield{
+                display: none;
+            }
+            /* #Ml_id{
+                display: none;
+            } */
+            .spinner-border{
+                /* display: none; */
+                /* margin-left: 500px; */
+            }
+            .spinner-border-div{
+                display: none; 
+                margin-left: 500px;
+            }
+            .spinner-border-div1{
+                display: none; 
+                margin-left: 500px;
+            }
+            body{
+            background-color: #F4F8FB;
+            }
+            div.ul.results {
+            color: #888;
+            }
+            div.ul.results b {
+            color: #000;
+            border: solid rgb(116, 72, 157) 1px;
+            }
+            ul li{
+            color: black;
+            border: solid gray 1px;
+            }
+            #rank{
+            color: green;
+            }
+            .divBlock{
+            border: solid black 1px;;
+            }
+            .cname{
+            color: rgb(255, 255, 255);
+            background-color: rgb(116, 72, 157);
+            opacity: 1;
+            width: 120;
+            }
+            .caction{
+            color: rgb(255, 255, 255);
+            padding: 1px;
+            background-color:rgb(11, 11, 20);
+            float: right;
+            opacity: 1;
+            width: 100;
+            cursor: pointer;
+            }
+            .cskills{
+            width: 150; 
+            color: red;
+            }
+            /*.container{border: solid black 2px; padding: 20px;}*/
+            /*.mentor{float: left;display: none;}
+            .mentee{float: right;display: none;}*/
+            /*#mentorname{color: red;}*/
+            /*#menteename{color: red;}*/
+            .usersDiv{display: none;}
+            /*.btn{
+            background: #7754F8;
+            color: #fff;
+            font-weight: 500;
+            padding: 10px 40px;
+            border-radius: 30px;
+            border-top-left-radius: 0px;
+            outline: none;
+            }*/
+            .mentor,.mentee{    
+                display: block;
+                padding: 5px 10px;
+                background-color: #ffffff;
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                transition: 0.3s;
+                border-top: 2px solid #7754F8;
+                min-height: 60px;
+                position: relative;
+            }
+            /*
+            .mentor:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            }*/
+            .mentor p span:nth-child(1),.mentee span:nth-child(1){
+            padding-right: 10px;
+            display: inline-block;
+            width: 100%;
+            }
+            .mentor p span:nth-child(2),.mentee span:nth-child(2){
+            font-weight: 600;
+            }
+            .mentor p span,.mentee p span{
+            font-size: 14px;
+            }
+            .color1{
+            color: #999999;
+            }
+            .color2{
+            font-weight: 600;
+            color: #000;
+            }
+            .btn:hover{
+            color: #ffffff;
+            }
+            .button {
+                background: #7754F8;
+                color: #fff;
+                font-weight: 500;
+                padding: 5px 10px;
+                border-radius: 30px;
+                border-top-left-radius: 0px;
+                outline: none;
+                border: none;
+                color: #FFFFFF;
+                text-align: center;
+                font-size: 15px;
+                width: 110px;
+                transition: all 0.5s;
+                cursor: pointer;
+                
+            }
+            .table .button{
+                margin: 5px !important;
+            }
+            .button span {
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            transition: 0.5s;
+            }
+            .button span:after {
+            content: '\00bb';
+            position: absolute;
+            opacity: 0;
+            top: 0;
+            right: -20px;
+            transition: 0.5s;
+            }
+            .button:hover span {
+            padding-right: 25px;
+            }
+            .button:hover span:after {
+            opacity: 1;
+            right: 0;
+            }
+            button:focus{
+            outline: none;
+            }
+            .rankcards{
+            padding: 20px;
+            background-color: #0A1032;
+            color: #ffffff;
+            /*text-align: center;*/
+            border-radius: 30px;
+            border-top-left-radius: 0px;
+            min-height: 260px;
+            margin-bottom: 10%;
+            margin-top: 5%;
+            }
+            .ranktext{
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            }
+            .ranker_name{
+            font-size: 15px;
+            font-weight: 600;
+            }
+            .rankerskill{
+            word-break: break-word;
+            min-height: 48px;
+            }
+            .select_part{
+            width: 30%;
+            }
+            .checkbox_part input{
+            margin-right: 4%;
+            }
+            .checkbox_input{
+            display: inline-block;
+            width: 15%;
+            }
+            .has-search .form-control {
+                padding-left: 2.375rem;
+                width: 95%;
+            }
+            .has-search .form-control-feedback {
+            position: absolute;
+            z-index: 2;
+            display: block;
+            width: 2.375rem;
+            height: 2.375rem;
+            line-height: 2.375rem;
+            text-align: center;
+            pointer-events: none;
+            color: #aaa;
+            }
+            .container{
+            max-width: 1140px !important;
+            }
+            .usersDiv .col{
+                max-width: 50%;
+            }
+            .mentor p,.mentee p{
+                margin-bottom: 5px;
+                display: inline-block;
+                width: 230px;
+            }
+            .table td, .table th{
+                    padding: 0.25rem;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6;
+    height: 20px !important;
+            }
+            .mentor .but,.mentee .but{
+                position: absolute;
+                right: 10px;
+                top: 10px;
+                font-size: 10px;
+                border-radius: 50%;
+                margin: 0px;
+                background: no-repeat;
+                border: 2px solid #000;
+                width: 25px;
+                height: 25px;
+                padding: 0px;
+            }
+            .mentor a,.mentee a{
+                display: block;
+            }
+            h1{
+                font-size: 1.7rem;
+            }
+
+            .modal-header,.modal-footer{
+                border:none;
+            }
+            .modal-content{
+                border-radius: 0px 0px 30px 0px;
+                padding: 15px;
+            }
+            .scrollbar
+{
+    /*margin-left: 30px;*/
+    height: 150px;
+    width: 950px;
+    /*background: #F5F5F5;*/
+    overflow-y: scroll;
+}
+
+.style-11::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+.style-11::-webkit-scrollbar{
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+.style-11::-webkit-scrollbar-thumb{
+    background-color: #3366FF;
+    border-radius: 10px;
+}
+
+#MenteeList .mentee{
+    margin-bottom: 15px;
+}
+
+#menteeListCount{
+    display: inline-block;
+    position: absolute;
+    right: 90px;
+    color: #007bff;
+    width: 165px;
+    text-align: right;
+}
+
+#MenteeList,.mentor{
+    top: 30px;
+}
+
+.search_icon{
+    position: absolute;
+    right: 75px;
+    top: 81px;
+    border-radius: 20px;
+}
+
+
+</style>
+    </head>
+    <body>
+        <div class='container '>
+            <div class="usersDiv">
+                <div class="row mt-2">
+                    <div class="col" id="MentorList">
+                        <!-- <div class='mentor'>
+                            <p>
+                                <span class="color1">Mentor Name&nbsp;:</span>
+                                <span id='mentorname' class="color2"></span>
+                            </p>
+                            <p>
+                                <span class="color1">Mentor Email&nbsp;&nbsp;:</span>
+                                
+                                <span id='mentoremail' class="color2"></span>
+                            </p>
+                            <p hidden id="mentorid"></p>
+                            <button class="but mt-3" style="vertical-align:middle" name="cancel" value="Cancel" onclick="cancelUser('mentor',)">&#10006;</button>
+                        </div> -->
+                    </div>
+                    <span id="menteeListCount">Mentee Count : <b><span id="menteeListCount_value"></span></b> </span>
+                    <div class="col scrollbar style-11" id="MenteeList">
+                      
+                    </div>
+                </div>
+
+                
+            </div>
+            <div class="row mt-3">
+                <div class="col">
+                    <div class="select_part form-group">
+                        <select id="searchBy" class="form-control">
+                            <option value='0'>Select choice</option>
+                            <option value="1">Search Mentor</option>
+                            <option value='2'>Search Mentee</option>
+                        </select>
+                    </div>
+                    <h1>Skill Search</h1>
+                    <div class="form-group">
+                        <!-- <input class="form-control" type="text" name="search" id="searchB" placeholder="Search by Skill"  onkeyup="callFunc()"/> -->
+                        <div class="form-group has-search">
+                            <span class="fa fa-search form-control-feedback"></span>
+                            <input class="form-control" type="text" name="search" id="searchB" placeholder="Search by Skill"  ><!-- onkeyup="callFunc()"-->
+                            <button class="button mt-3 search_icon" onclick="callFunc('ML')"><span>Search</span></button>
+                        </div>
+                        
+                    </div>
+                    <div class="checkbox_part">
+                        <div class="checkbox_input">
+                            <input type="checkbox" id="locationC">Location
+                        </div>
+                        <div class="checkbox_input">
+                            <input type="checkbox" id="levelC">Career Level
+                        </div>
+                        <div class="checkbox_input">
+                          <input type="checkbox" id="gexpC">Interest
+                      </div>
+
+                      <!-- <div class="checkbox_input">
+                        <input type="checkbox" id="Ml_id">Machine Learning
+                    </div> -->
+
+                    </div>
+                    <div id="textfield">Data</div>
+                    <div class="results mt-4" id="results"></div>
+                    <p id="demo"></p>
+                    <!-- <div class="spinner-border" role="status">
+                        <strong>Collecting data</strong>
+                      </div> -->
+
+                      
+                        <div class="spinner-border-div">
+                        <div class="spinner-border" role="status">
+                        </div>
+
+                        <div style="margin-left: -120px;" id='loadContent'>
+                          Loading more search results based on Machine Learning...
+                        </div>
+                        </div>
+
+                        <div class="spinner-border-div1">
+                            <div class="spinner-border" role="status">
+                            </div>
+    
+                            <div style="margin-left: -37px;" id='loadContent'>
+                             Loading results...
+                            </div>
+                            </div>
+                      
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-3">
+                    <div class="rankcards">
+                        <p class="ranktext">Rank 1</p>
+                        <p class="ranker_name">Preeti</p>
+                        <p class="rankerskill">Python,Machine Learning,QuickBase</p>
+                        <button class="button mt-3">Select</button>
+                    </div>
+                </div>
+                </div> -->
+        </div>
+        <!-- <div class="container">
+            <select id="searchBy">
+                <option value='0'>Select choice</option>
+                <option value="1">Search Mentor</option>
+                <option value='2'>Search Mentee</option>
+            </select>
+            
+            <h1>Skill Search</h1>
+            
+            <div class="form-group">
+                <input class="form-control" type="text" name="search" id="searchB" placeholder="Search by Skill"  onkeyup="callFunc()"
+                />
+            </div>
+            <input type="checkbox" id="locationC">Include Location
+            <input type="checkbox" id="levelC">Include Career Level
+            <div class="results" id="results"></div>
+            <p id="demo"></p>
+              
+            </div> -->
+
+
+            <!-- The Modal -->
+            <div class="modal fade" id="myModal">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                
+                  <div class="modal-header">
+                    
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  
+                  <!-- Modal body -->
+                  <div class="modal-body" >
+                  <pre id="showMessage"></pre>
+                  </div>
+                  
+                                      
+                </div>
+              </div>
+          </div>
+
+          
+
+
+        <script>
+            var userLat;
+            var userLong;
+            var id;
+            var searchFor;
+            var mentorName;
+            var mentorEmail;
+            var menteeName;
+            var menteeEmail;
+            var mentors=[];
+            var mentees=[];
+            var uname='';
+        var userCL;
+            var searchIdArray=[];
+$(document).ready(function(){
+//window.parent.QBbusy('Loading');  
+ getUserIdentity(function(identity){
+  console.log(identity);
+  console.log('id='+identity[3].value);
+    machesPerform();
+    getLocation();
+    //window.parent.QBbusyHide();
+})
+$("#searchB,.search_icon").prop('disabled', true);
+$('#locationC').change(function(){
+callFunc(); 
+});
+$('#levelC').change(function(){
+callFunc(); 
+});
+$('#gexpC').change(function(){
+callFunc(); 
+}); 
+
+$('#Ml_id').change(function(){
+    var MLC=$('#Ml_id').prop('checked');
+    if(MLC==true){
+    searchFor=$('#searchBy').val();
+    console.log(searchFor)
+    if(searchFor=='0' || searchFor==undefined){
+    $('#myModal').modal('show');
+    $('#showMessage').html('Please choose a Mentor or Mentee selection ');
+    return false;
+    }
+
+    var keywordValue=$('#searchB').val();
+    if(keywordValue.length >3)
+    {   
+        pyodide_test();
+        ImplementMachineLearning();
+    }else{
+        $('#myModal').modal('show');
+        $('#showMessage').html('add atleat 4 keyword to perform machine learning');
+        return false;
+    }
+    }
+});
+
+            
+$('#searchBy').change(function(){
+  console.log($(this).val());
+  if($(this).val()=='' || $(this).val()=='0'){
+    $('#searchB').prop('disabled',true);
+    $('.search_icon').prop('disabled',true);
+  }else{
+    $('#searchB').prop('disabled',false);
+    $('.search_icon').prop('disabled',false);
+  }
+  searchFor=$(this).val();
+})
+
+
+})
+
+
+function getUserIdentity(identityDetails){
+  $.get("main?act=API_GetUserInfo",function(xml){
+ var uname=$("firstName",xml).text();
+ var email=$('email',xml).text();
+
+var queryObj={};
+ queryObj.from="bqwxux68d";
+  queryObj.select=[3,4,5,6,7,8,9];
+  queryObj.where=`{7.EX.'${email}'}`;
+  
+var settings = {
+    "url": "https://api.quickbase.com/v1/records/query",
+    "method": "POST",
+    "timeout": 0,
+    "headers": {
+      "Authorization": "QB-USER-TOKEN b5csc7_nqsg_bmfvitcdiif8xqhrx9cxm42y9y",
+      "QB-Realm-Hostname": "builderprogram-asingh8332.quickbase.com",
+      "Content-Type": "application/json"
+    },
+    "data": JSON.stringify(queryObj),
+  };
+
+$.ajax(settings).done(function(loginUserDetails){
+console.log('Login user details');
+console.log(loginUserDetails);
+id=loginUserDetails.data[0][3].value;
+uname=loginUserDetails.data[0][9].value;
+localStorage.setItem("empId", id);
+console.log('Set Items='+localStorage.getItem("empId"))
+localStorage.setItem("empCL", loginUserDetails.data[0][9].value);
+localStorage.setItem('uname',loginUserDetails.data[0][6].value)
+identityDetails(loginUserDetails.data[0]);
+});
+});
+}
+
+
+
+
+function gotoGoals(menteeId,type){  
+console.log(arguments); 
+//getUserIdentity(function(identity){
+        //var TempVarID=identity[3].value;
+        var TempVarID=localStorage.getItem("empId");
+    if(type=='mentor'){
+    location.href=`bqwxuw99t?a=dbpage&pageID=10&mentorId=${menteeId}&menteeId=${TempVarID}`;
+    }else{
+             location.href=`bqwxuw99t?a=dbpage&pageID=10&mentorId=${TempVarID}&menteeId=${menteeId}`;
+}
+ //}) 
+ }
+            
+            function getLocation() {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+              } else { 
+                x.innerHTML = "Geolocation is not supported by this browser.";
+              }
+            }
+            function showPosition(position) {
+              console.log(position.coords.latitude);
+              console.log(position.coords.longitude);
+              userLat=position.coords.latitude;
+              userLong=position.coords.longitude;
+              
+            }
+                       
+            function onlyUnique(value, index, self) {
+            return self.indexOf(value) === index;
+            }
+            function selectAction(selectid){
+            console.log('SearchFor='+searchFor);
+            console.log('SearchFor='+typeof(searchFor));
+            var id=localStorage.getItem("empId");
+            console.log(mentors);
+            console.log(mentees)
+            console.log(searchFor);
+            if(searchFor=='0' ){
+            console.log('condition 0 ');
+            console.log('Herre');
+            $('#myModal').modal('show');
+            $('#showMessage').html('Please choose a Mentor or Mentee selection ');
+              return false;
+            }else{console.log('condition0 else');}   
+
+            if(searchFor=='2' && mentors.indexOf(id)>-1){
+              //alert('You have already selected a mentee')
+              console.log('condition1')
+              //$('#myModal').modal('show');
+              //$('#showMessage').html('You have already selected a mentee');
+              //return false;
+            }else{console.log('condition1 else');}
+            
+            if(searchFor=='1' && mentees.indexOf(id)>-1){
+              //$('#myModal').modal('show');
+              //console.log('condition2')
+             // alert('You have already selected a mentor');
+              //$('#showMessage').html('You have already selected a mentor');
+              //return false;
+            }else{console.log('condition2 else');}
+
+        
+        if(searchFor=='1' && mentorCount>0){
+            //alert('you selected a mentor'+id);
+            $('#myModal').modal('show');
+            $('#showMessage').html('You have already selected a mentor');
+            return false;
+            }
+            
+            
+            var queryObj={};
+            queryObj.to="bqxdwqyfw";
+            if(searchFor=='1'){
+              queryObj.data=[ {"6": { "value": selectid},"7": { "value": id}}];
+            }else{
+              queryObj.data=[ {"6": { "value": id},"7": { "value": selectid}}];
+            }
+            
+            
+            
+            queryObj.fieldsToReturn=[6, 7,8,9,10,11,12,13,14,15,16,17,18,19,10];
+            
+            
+            
+              var settings = {
+              "url": "https://api.quickbase.com/v1/records",
+              "method": "POST",
+              "timeout": 0,
+              "headers": {
+                "Authorization": "QB-USER-TOKEN b5csc7_nqsg_bmfvitcdiif8xqhrx9cxm42y9y",
+                "QB-Realm-Hostname": "builderprogram-asingh8332.quickbase.com",
+                "Content-Type": "application/json"
+              },
+              "data": JSON.stringify(queryObj),
+            };
+            $.ajax(settings).done(function (response) {
+              console.log(response);
+               response=response['data'][0];
+               mentorName=response[16].value;
+               mentorEmail=response[17].value;
+               menteeName=response[14].value;
+               menteeEmail=response[15].value;
+               console.log('========================================');
+               console.log(mentorName + " "+ mentorEmail + ""+menteeName+""+menteeEmail);
+               console.log(response);
+                uname=localStorage.getItem("uname");
+               var identityname=uname;
+               var msg="";
+               if(searchFor=='1'){
+                msg= uname+` has requested  ${mentorName} as his mentor`;
+               }else if(searchFor=='2'){
+                msg=uname+` has assigned ${menteeName} as his mentee`;
+               }
+               console.log('==========Message='+msg);
+               callFunc();
+               // my last change
+              machesPerform();
+              $('.container').scrollTop(0);
+              window.scrollTo(0, 0);
+               callMessageAPI("1380fa68-1d3e-4b08-b0e2-bbb9d2b05876","19:6ac7d4cd3e4b4bf1812d85f00491184e@thread.tacv2",msg,identityname,"10729727-1b26-4413-bfe0-e511819d3ccb")
+            });
+            
+            }
+            function callFunc(MLCheck){
+            console.log('In call function');
+            var locationC=$('#locationC').prop('checked');
+            var levelC=$('#levelC').prop('checked');
+            var gexpC=$('#gexpC').prop('checked');
+            searchFor=$('#searchBy').val();
+	        $('.spinner-border-div').hide();
+            $('.spinner-border-div1').hide();
+
+            var SearchMatchArray=[ "title","pskill"]
+            if(gexpC==true){
+              SearchMatchArray.push('gexp');
+            }
+
+            if(MLCheck=='ML'){
+               // $('#loadContent').html('Loading data');
+                $('.spinner-border-div1').show();
+            }
+
+            
+           
+            //return false;
+            var queryObj={};
+            queryObj.from="bqwxux68d";
+            queryObj.select=[3,6,7,8,9,10,11,12,13,14,15,20,21];
+            //queryObj.where="{6.XEX.'Anuj'}";
+            var empCL=localStorage.getItem("empCL");
+
+            
+            if(levelC==true && searchFor=='1'){
+            queryObj.where=`{9.LT.${empCL}}`;
+           
+            }else if(levelC==true && searchFor=='2'){
+                queryObj.where=`{9.GT.${empCL}}`;
+            }
+
+
+            console.log(queryObj.where);
+            //return false;
+            queryObj.sortBy=[{"fieldId":4,"order":"ASC"},{"fieldId":5,"order":"ASC"}];
+            queryObj.groupBy=[{"fieldId":6,"grouping":"equal-values"}];
+            queryObj.options={"skip":0,"top":0,"compareWithAppLocalTime":false};
+            
+            console.log(queryObj);
+            
+            var settings = {
+              "url": "https://api.quickbase.com/v1/records/query",
+              "method": "POST",
+              "timeout": 0,
+              "headers": {
+                "Authorization": "QB-USER-TOKEN b5csc7_nqsg_bmfvitcdiif8xqhrx9cxm42y9y",
+                "QB-Realm-Hostname": "builderprogram-asingh8332.quickbase.com",
+                "Content-Type": "application/json"
+              },
+              "data": JSON.stringify(queryObj),
+            };
+            
+            console.log(locationC);
+            console.log(levelC);
+            //return false;
+            getUserMatchDetails(function(userMatchDetails){
+              var matchArrayTemp=userMatchDetails.data;
+              var matchArrayValue=[];
+              matchArrayTemp.forEach(function(i){
+                matchArrayValue.push(i[6].value);
+                matchArrayValue.push(i[7].value);
+                mentors.push(i[6].value);
+                mentees.push(i[7].value);
+              })
+              var matchArray = matchArrayValue.filter(onlyUnique);
+            
+            $.ajax(settings).done(function (response) {
+                console.log(response.data);
+                var keywordValue=$('#searchB').val();
+                var list=[];
+                var dataArray=response.data;
+                  dataArray.forEach(function(i,j){
+                  var tempObj={};
+            
+                  tempObj.title=i[10].value;
+                  tempObj.author={};
+                  tempObj.author.firstName=i[6].value;
+                  tempObj.location=i[13].value;
+                  tempObj.latitude=i[14].value;
+                  tempObj.longitude=i[15].value;
+                  tempObj.id=i[3].value;
+                  tempObj.pskill=i[20].value;
+                  tempObj.gexp=i[21].value;
+                  tempObj.cl=i[9].value;
+                   //if(i[6].value!=uname){
+                    console.log(matchArray.indexOf(i[3].value));
+                    if(matchArray.indexOf(i[3].value)==-1){
+                     list.push(tempObj);
+                    }else{
+                      console.log(tempObj.author.firstName);
+                    }
+                   //}
+                  }); 
+                  console.log('Here list')
+                  console.log(list);
+            
+            
+            
+              
+                  const options = {
+                // isCaseSensitive: true,
+                 //includeScore: true,
+                // shouldSort: true,
+                 includeMatches: false,
+                // findAllMatches: true,
+                // minMatchCharLength: 1,
+                  location: 1,
+                 threshold: 0.6,
+                 distance: 100,
+                limit: 10,
+                // useExtendedSearch: false,
+                // ignoreLocation: false,
+                // ignoreFieldNorm: false,
+                keys: SearchMatchArray
+              };
+              //console.log(options);
+              const fuse = new Fuse(list, options);
+              //console.log(fuse);
+              // Change the pattern
+              const pattern = keywordValue;
+              //console.log(pattern);
+              var responseS=fuse.search(pattern);
+              console.log(responseS);
+            
+            
+            
+            if(locationC==true){
+            console.log('location filter')
+            responseS.forEach(function(i,j){
+            var d=Math.round(getDistance(userLat,userLong,i.latitude,i.longitude));
+            responseS[j].distance=d;
+            })
+            console.log('Distance');
+            console.log(responseS);
+            
+            responseS.sort(function(a, b) {
+              return a.distance - b.distance;
+            });
+            
+            console.log(responseS);
+            console.log('end');
+            }
+            //return false;
+              // var stringSend="<div class='divBlock'><ul class='divBox'>";
+            
+                  var stringSend = "<table class='table' id='searchTable'><tr><th>Rank</th><th>Name</th><th>Primary Skill</th><th>Secondary Skills</th><th>Career level</th><th>Interest</th><th>Location</th><th>Action</th></tr>";
+            
+                              // `<p class="ranktext">Rank ${count++}</p><p class="ranker_name">${element.author.firstName}</p><p class="rankerskill">${element.title}</p><button class="button mt-3"  id='selectaction' onclick="selectAction(${element.id})"><span>Select </span></button>`
+            
+                  console.log(stringSend);
+                  var count=1;
+                  responseS.forEach(function(element,j){
+                    if(j<10){
+                      console.log('here603'+j);
+                      console.log(element);
+                      console.log(element.title);
+                      console.log(element.author.firstName);
+                      console.log("id="+id+ "element id="+element.id)
+                      if(id!=element.id){
+                          searchIdArray.push(element.id);
+                      // stringSend+=`<li><div id="rank">Rank${count++}</div><div class='caction'><input type="button" name="select" id='selectaction' onclick="selectAction(${element.id})" value="Select"><span>Select </span></div><p class='cname'>${element.author.firstName}</p><p class='cskills'>${element.title}</p></li>`;
+                      stringSend+=`<tr><td class="ranktext">${count++}</td><td class="ranker_name">${element.author.firstName}</td><td>${element.pskill}</td><td class="rankerskill">${element.title}</td><td>${element.cl}</td><td>${element.gexp}</td><td>${element.location}</td><td><button class="button mt-3"  id='selectaction' onclick="selectAction(${element.id})"><span>Select </span></button><td></tr>`
+                    }
+                    }
+                   });
+                  stringSend+="</table>";
+                  //$('#resultDiv').html(stringSend);
+                  $('#results').html(stringSend);
+                  $('.spinner-border-div1').hide();
+
+                    var keywordValue=$('#searchB').val();
+                    if(keywordValue.length >3 && MLCheck=='ML')
+                    {   
+                    console.log('ML called')
+                   // FetchMLBasedResultFromQB();
+                     pyodide_test();
+                     ImplementMachineLearning();
+                    }
+                     //var jsonData=[{"Mentor Id": "219", "Mentee Id": "132", "Mentee Name": "Ayush Gautam", "Mentee Primary Skill": "IBM Cognos", "Mentee Secondary Skills": null, "Mentee Career Level": "11", "Rank": 1}, {"Mentor Id": "219", "Mentee Id": "138", "Mentee Name": "Shashi Bhushan Siddula", "Mentee Primary Skill": "SAP SD Sales Order Management", "Mentee Secondary Skills": "SAS BI Tools", "Mentee Career Level": "10", "Rank": 1}, {"Mentor Id": "239", "Mentee Id": "219", "Mentee Name": "AnujFB", "Mentee Primary Skill": "Node Js", "Mentee Secondary Skills": "Javascript", "Mentee Career Level": "10", "Rank": 1}, {"Mentor Id": "219", "Mentee Id": "189", "Mentee Name": "Penugonda Navya Sri", "Mentee Primary Skill": "Microsoft FED ReactJS", "Mentee Secondary Skills": "Automotive,Microsoft PowerApps", "Mentee Career Level": "11", "Rank": 1}, {"Mentor Id": "219", "Mentee Id": "236", "Mentee Name": "kishor singh", "Mentee Primary Skill": "Sharepoint Development", "Mentee Secondary Skills": ".Net Development", "Mentee Career Level": "8", "Rank": 1}, {"Mentor Id": "219", "Mentee Id": "139", "Mentee Name": "Vijay Malik", "Mentee Primary Skill": "Functional Test Planning", "Mentee Secondary Skills": "Selenium", "Mentee Career Level": "10", "Rank": 1}, {"Mentor Id": "219", "Mentee Id": "122", "Mentee Name": "Sri Hari Ponnaganti", "Mentee Primary Skill": "Energy Fundamentals", "Mentee Secondary Skills": "Power Trading", "Mentee Career Level": "11", "Rank": 1}, {"Mentor Id": "239", "Mentee Id": "229", "Mentee Name": "Ashish Kumar", "Mentee Primary Skill": "Jquery", "Mentee Secondary Skills": "Javascript", "Mentee Career Level": "11", "Rank": 1}, {"Mentor Id": "219", "Mentee Id": "222", "Mentee Name": "Kathi Sneha", "Mentee Primary Skill": "Java", "Mentee Secondary Skills": "Apache Spark", "Mentee Career Level": "11", "Rank": 1}]
+                   //manipulateMLResult(jsonData);
+  
+              });
+            })
+            //});
+            }
+            
+            function getDistance(lat1, lon1, lat2, lon2) 
+            {
+            var R = 6371; // km
+            var dLat = toRad(lat2-lat1);
+            var dLon = toRad(lon2-lon1);
+            var lat1 = toRad(lat1);
+            var lat2 = toRad(lat2);
+            
+            var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+            var d = R * c;
+            return d;
+            }
+            
+            // Converts numeric degrees to radians
+            function toRad(Value) 
+            {
+              return Value * Math.PI / 180;
+            }
+            
+            
+                     
+            
+            function getAccessTokenWithoutUser(success){
+            $.ajax({
+              url:"https://cors-anywhere.herokuapp.com/https://login.microsoftonline.com/59c37c0b-f160-4b65-8b47-a62a5340a340/oauth2/v2.0/token",
+              type: 'POST',
+            headers:{
+                  "Content-Type": "application/x-www-form-urlencoded",
+                  'Access-Control-Allow-Origin': '*'
+              },
+              data: 
+              {
+                      "grant_type":"client_credentials",
+                      "client_id": "4e6d0cd9-2185-4fda-9b9a-7bb95df122e0",
+                      "client_secret":"i9P6-GdbEgtcZwwUlWN803k~vcS6._tymx",
+                      "scope":"https://graph.microsoft.com/.default",
+              },
+              success: function (result) {
+                  success(result.access_token);
+              }
+            });
+            }
+            
+            function getAccessToken(success){
+            
+            
+            
+            var clientId = '';
+            var tenantId = '59c37c0b-f160-4b65-8b47-a62a5340a340';
+            var scope = 'offline_access user.read mail.read';
+            var clientSecret = 'authorization_code';
+            var grantType = 'authorization_code';
+            var redirectUri = 'https://localhost:3000';
+            
+            var refreshCode = "0.AAAAC3zDWWDxZUuLR6YqU0CjQNkMbU6FIdpPm5p7uV3xIuBkAIA.AgABAAAAAAB2UyzwtQEKR7-rWbgdcBZIAQDs_wIA9P-RcevWu-gf5NZyzbQT4HQb9luvYSTQwGOuwwBurWFErwkCdhHy_wDf_vN2dV6tohgovT80VmqeW8jjjevg4ouFFpI_VGYJsIuqmpJgZkwSd35-PqhR2WDGPE3bE8cb2Fnc4c83Onkq4HiGtx0m3LhP7sSnssnmVpxYOrbjqEmTB5wZEeey1565CohOl6gz5O72vVIu7fBix9qfBzBSJbvl7SUKPuQjk3RFNFOtYBdE3GtHkiNGp5_EL7bLTv7QftbG3w1TwAta2H81My1FnFCmUJQGHuBFOZEumEV7OaZhcOMaB9ao4OqQ42Io79XevGVudc5HL2gKieX3BddhtmtQ2wSWBfn4mkYkz4Leed_KAVpmq92bslXTEXWfyvWmFO4jVWUgiLPwJlTgZUv9RxqauXLXmMoso3BAvueqHfVe6BwAlVlJIOmAOIgDZs88GGPU3d9c1R9TC-pd32m3rymvSC-eq4lct1AY_Aez5bl2B_UqI98iViGbBp77TmwzYnT8ynHeymz-a59U9vvHTfkCl2K5p4pvuE2bn5qm3RlmcLd2O7Vq6chyc6YrQEpV1Mj8HXp_6l62knS5FXKSi_AoFCT2Tpp1uAj-j54spLIqxHQJLpXLd9eEkLwcgQN1Lz4l02bq6fOfudY37lVik1Qqy8Qy3J87GDBRa6i8sBgHpf_k9rZurZ8UkQkJ6ibq6IRxxvmYzZ6GnTlLf5ZCjN64oUYJeEEgG7U6oePjaglbQHBE64oEz9DoTt9IVoOnkRCMN-Z_da-goL_6DVxv03Po9qJubqTg4WZvOhCJlqyTx87OMNgBe21kUt-sio2nNqt1Gbbxy7ZE8oreRNDd8seFyatwFvkA97O5I4RuxS6OakBMjlc6IMIQt0nshQ-xYf-BoS8RC4-Io8kAXIIZycjUfqkkmc8Q3ldECT-27zjVUTED9MGGBx1rZYyIWsRcVMLHVn_Hh2LU1StFvley1HTLVvxqjzeFKtANCZdxL_axcEpp7s3gnBKiudQ2U18BjWiJW7OaXoG4RsaPaZxOKALiCDTifx2nW_H2KU1c38Rr1DdGjrmPhfzczZn-l4g-Zl2be82euk-Nad3KeoD6Sbm0BNM4K9DbCbFOClHNoII-HH1r-LEfTI6Sw9WJLNpL6VuKyALZyXRlRZYLzXZm_oDtRtbDbzjH666ha43OLFNL-uW_fZnwKcYYdedLI9-EW9z0HdO9VF7BauX2AVkjiSDoQKAZR_8gKiJ3xYCl19_nJVf5AUbEc9Herh-aHkaX1T-u7O_1Fyn12ByJPITUqexD3AA8-axmEPHtXzUlX-RZ58w0CF2d8NsqZ0y_texqocpol0wuW4N8rCem9HlPpOQ94hFZZGfKZ6W5p2Rx2IAvRhE7T1qSiocNDisFZuGyOTZnn8e6fXGjRuTsIPL1E0jUFf5E22XnsAHmI3JAMwEtu7uf1loTvANkCNTSuc3IUcFYZ1fWu62K3k1CNOIJ5DF3KGTvZ_Vg6hfjFPARn3YF3FUUqgiaVKe7ZuUVvN6a79CYIgawVyl15FQL0YtTJgiHIQQplFFUXvXSMUsAwfvqJ8-4XPHGwmBLrJyJSmsk4-GeJgZ9nyNW-K8";
+            
+            var urlAccessToken = 'https://login.microsoftonline.com/' + tenantId + '/oauth2/v2.0/token'
+            
+            $.ajax({
+              url:"https://cors-anywhere.herokuapp.com/https://login.microsoftonline.com/59c37c0b-f160-4b65-8b47-a62a5340a340/oauth2/v2.0/token",
+              type: 'POST',
+            headers:{
+                  'Access-Control-Allow-Origin': '*'
+              },
+              data: 
+              {
+                      "grant_type":"refresh_token",
+                      "client_id": "4e6d0cd9-2185-4fda-9b9a-7bb95df122e0",
+                      "client_secret":"i9P6-GdbEgtcZwwUlWN803k~vcS6._tymx",
+                      "redirect_uri":"https://localhost:3000",
+                      "scope":"offline_access user.read mail.read",
+                      "refresh_token": refreshCode
+            
+              },
+              success: function (result) {
+                  success(result.access_token);
+              },error:function(error){
+        console.log(error);
+        }
+            });
+            
+            
+            }
+            
+            function callMessageAPI(teamId,channelId,messageText,displayName,displayNameId){
+            
+            //QBbusy("Sending. . .");
+            
+            getAccessToken(function success(retData){ 
+              var accessToken = retData;
+              //debugger;
+              sendMessage(accessToken,teamId,channelId,messageText,displayName,displayNameId);
+            
+            });
+            function sendMessage(accessToken,teamId,channelId,messageText,displayName,displayNameId){
+            
+              console.log('Teams Message sending');
+            
+            //debugger;
+            var contentDiv = document.getElementById('content');
+            var teamsIdText = teamId;
+            var channelIdText = channelId;
+            var url = "https://graph.microsoft.com/v1.0/teams/" + teamsIdText +"/channels/" +channelIdText + "/messages"
+            //var data = {};
+            
+            if( !(displayName == '' || displayName == 'undefined' || displayName == null ) ){
+                  
+               // data.body = {content:"Hello " + "<at id=\'0\'>" + displayName + "</at>"}  
+               // data.body = {mentions:} 
+             var data =   {
+                          "body": {
+                                  "contentType": "html",
+                                  "content": messageText + " " + "<at id=\'0\'>" + displayName + "</at>"
+                                  },
+                      "mentions": [
+                                      {
+                                       "id": 0,
+                                       "mentionText": displayName,
+                                       "mentioned": {
+                                       "user": {
+                                          "displayName": displayName,
+                                          "id": displayNameId,
+                                          "userIdentityType": "aadUser"
+                                          }   
+                                       }
+                                      }
+                                  ]
+                          };    
+            }
+            
+            //data.body = {content:messageText};
+            
+            
+            var headers = {
+            'Content-Type': 'application/json',
+            'Authorization':'Bearer ' + accessToken,
+            }
+            
+            console.log(headers);
+            //debugger;
+            
+            jQuery.ajax({
+            url: url,
+            method: 'POST',
+            data:JSON.stringify(data),
+            headers: headers,
+            success: function(result) {
+              console.log(JSON.stringify(result));
+              setTimeout(function() {
+                      //QBbusyHide();
+                      }, 1000);
+              },
+            error: function(jqXHR,exception){
+              console.log("Unable to send");
+              setTimeout(function() {
+                //  QBbusyHide();
+                }, 1000);
+            
+            }
+            })
+            }
+            }  
+        
+        
+        
+        
+
+
+
+
+            function cancelUser(menteeId,mentorId){
+            if (confirm('Are you sure want to cancel it')) {
+            
+            var queryObj={};
+            queryObj.from="bqxdwqyfw";
+            queryObj.where=`{7.EX.'${menteeId}'} AND {6.EX.'${mentorId}'}`;
+            
+            var settings = {
+              "url": "https://api.quickbase.com/v1/records",
+              "method": "DELETE",
+              "timeout": 0,
+              "headers": {
+                "Authorization": "QB-USER-TOKEN b5csc7_nqsg_bmfvitcdiif8xqhrx9cxm42y9y",
+                "QB-Realm-Hostname": "builderprogram-asingh8332.quickbase.com",
+                "Content-Type": "application/json"
+              },
+              "data": JSON.stringify(queryObj),
+            };
+            $.ajax(settings).done(function (response) {
+              console.log(response);
+              callFunc();
+              //location.reload();
+              $('.usersDiv').hide();
+              machesPerform();
+            
+            });
+            }
+            }
+
+            function machesPerform(){
+            getUserMatchDetails(function(data){
+            var matchdata=data.data;
+            matchDataLogic(matchdata);
+            })
+            }
+            function getUserMatchDetails(userMatchDetails){
+       var id=localStorage.getItem("empId");  
+    console.log('userMatch Details='+id);
+       var queryObj={};
+            queryObj.from="bqxdwqyfw";
+            queryObj.select=[6,7,8,9,10,11,12,13,14,15,16,17,18];
+            queryObj.where=`{7.EX.${id}} OR {6.EX.${id}}`
+            queryObj.sortBy=[{"fieldId":4,"order":"ASC"},{"fieldId":5,"order":"ASC"}];
+            queryObj.groupBy=[{"fieldId":6,"grouping":"equal-values"}];
+            queryObj.options={"skip":0,"top":0,"compareWithAppLocalTime":false};
+            var settings = {
+              "url": "https://api.quickbase.com/v1/records/query",
+              "method": "POST",
+              "timeout": 0,
+              "headers": {
+                "Authorization": "QB-USER-TOKEN b5csc7_nqsg_bmfvitcdiif8xqhrx9cxm42y9y",
+                "QB-Realm-Hostname": "builderprogram-asingh8332.quickbase.com",
+                "Content-Type": "application/json"
+              },
+              "data": JSON.stringify(queryObj),
+            };
+            
+            
+            $.ajax(settings).done(function (response) { 
+              userMatchDetails(response);
+            });
+            }   
+
+            function matchDataLogic(matchdata){
+              var menteeListData=``;
+              var mentorListData=``;
+              var menteeCount=0;
+          mentorCount=0;
+            console.log('==========================Id'+id)
+              matchdata.forEach(element => {
+              if(element[6].value==id){
+                console.log('Menteelist='+element[7].value)
+                $('.usersDiv').show();
+                $('.mentee').show();
+            menteeCount++;
+                  menteeListData+=`<div class='mentee'><p><span class="color1">Mentee Name&nbsp;:</span><span id='menteename' class="color2">${element[14].value}</span></p><p><span class="color1">Mentee Email&nbsp;&nbsp;:</span><span id='menteeemail' class="color2">${element[15].value}</span></p><button class="but" style="vertical-align:middle" name="cancel" value="Cancel" onclick="cancelUser(${element[7].value},${element[6].value})">&#10006;</button><a href="javascript:void(0)" onclick="gotoGoals(${element[7].value})">Goals</a></div>`
+              }else if(element[7].value==id){
+                $('.usersDiv').show();
+                $('.mentor').show();
+        mentorCount++;
+              mentorListData+=`<div class='mentor'><p><span class="color1">Mentor Name&nbsp;:</span><span id='mentorname' class="color2">${element[16].value}</span></p><p><span class="color1">Mentor Email&nbsp;&nbsp;:</span><span id='menteeemail' class="color2">${element[17].value}</span></p><button class="but" style="vertical-align:middle" name="cancel" value="Cancel" onclick="cancelUser(${element[7].value},${element[6].value})">&#10006;</button><a href="javascript:void(0)" onclick="gotoGoals(${element[6].value},'mentor')">My Goals</a></div>`
+              }
+            });
+        console.log('menteeCount='+menteeCount);
+        if(menteeCount>0){
+            console.log('herer');
+            $('#menteeListCount_value').html(`${menteeCount}`);
+        }
+            $('#MenteeList').html(menteeListData);
+            $('#MentorList').html(mentorListData);
+            }
+
+
+function pyodide_test(){
+pythonText="";
+$.ajaxSetup({async:false});
+//docURL="?a=dbpage&pageName=final.py"; //ML file
+docURL="?a=dbpage&pageName=Employee_search.py";// search file
+$.get(docURL,function(data){
+pythonText=data;
+});
+console.log('Here python======================================');
+console.log(pythonText);
+
+languagePluginLoader.then(function () {
+console.log(pyodide.runPython(`
+    import sys
+    sys.version
+`));
+pyodide.loadPackage(['pandas','scikit-learn']).then(() => {
+pyodide.runPython(pythonText);
+});
+});
+}
+
+function ImplementMachineLearning(){
+$('.spinner-border-div').show();
+    var ML=setInterval(function(){
+        console.log('calling time interval'); 
+        var MlData=$('#textfield').html();
+        console.log(MlData);
+        console.log(typeof(MlData));
+        if(MlData!='Data'){
+            var arrayData=JSON.parse(MlData);
+            console.log(arrayData);
+            manipulateMLResult(arrayData);
+            console.log('Ml Object')
+            console.log(ML);
+            clearInterval(ML);
+        }
+        
+        //
+     }, 5000);
+}
+//var jsonData=[{"Mentor Id": "219", "Mentee Id": "132", "Mentee Name": "Ayush Gautam", "Mentee Primary Skill": "IBM Cognos", "Mentee Secondary Skills": null, "Mentee Career Level": "11", "Rank": 1}, {"Mentor Id": "219", "Mentee Id": "138", "Mentee Name": "Shashi Bhushan Siddula", "Mentee Primary Skill": "SAP SD Sales Order Management", "Mentee Secondary Skills": "SAS BI Tools", "Mentee Career Level": "10", "Rank": 1}, {"Mentor Id": "239", "Mentee Id": "219", "Mentee Name": "AnujFB", "Mentee Primary Skill": "Node Js", "Mentee Secondary Skills": "Javascript", "Mentee Career Level": "10", "Rank": 1}, {"Mentor Id": "219", "Mentee Id": "189", "Mentee Name": "Penugonda Navya Sri", "Mentee Primary Skill": "Microsoft FED ReactJS", "Mentee Secondary Skills": "Automotive,Microsoft PowerApps", "Mentee Career Level": "11", "Rank": 1}, {"Mentor Id": "219", "Mentee Id": "236", "Mentee Name": "kishor singh", "Mentee Primary Skill": "Sharepoint Development", "Mentee Secondary Skills": ".Net Development", "Mentee Career Level": "8", "Rank": 1}, {"Mentor Id": "219", "Mentee Id": "139", "Mentee Name": "Vijay Malik", "Mentee Primary Skill": "Functional Test Planning", "Mentee Secondary Skills": "Selenium", "Mentee Career Level": "10", "Rank": 1}, {"Mentor Id": "219", "Mentee Id": "122", "Mentee Name": "Sri Hari Ponnaganti", "Mentee Primary Skill": "Energy Fundamentals", "Mentee Secondary Skills": "Power Trading", "Mentee Career Level": "11", "Rank": 1}, {"Mentor Id": "239", "Mentee Id": "229", "Mentee Name": "Ashish Kumar", "Mentee Primary Skill": "Jquery", "Mentee Secondary Skills": "Javascript", "Mentee Career Level": "11", "Rank": 1}, {"Mentor Id": "219", "Mentee Id": "222", "Mentee Name": "Kathi Sneha", "Mentee Primary Skill": "Java", "Mentee Secondary Skills": "Apache Spark", "Mentee Career Level": "11", "Rank": 1}]
+//manipulateMLResult(jsonData);
+function manipulateMLResult(jsonData){
+console.log('load here');
+var empId=localStorage.getItem("empId");
+usersTempArray=[];
+//empId=219;
+console.log('herer 1102');
+console.log(jsonData);
+console.log(typeof(jsonData));
+jsonData.forEach(function(i,j){
+console.log(typeof(usersTempArray));
+console.log(i['Mentee Id']);
+console.log(i['Mentor Id']);
+if(empId!=i['Mentee Id']){
+    usersTempArray.push(i['Mentee Id']);
+}else if(empId!=i['Mentor Id']){
+    usersTempArray.push(i['Mentor Id']);
+}
+})
+console.log(usersTempArray);
+usersTempArray = usersTempArray.filter(onlyUnique);
+console.log('only unique');
+
+console.log(usersTempArray);
+if(usersTempArray.length>0){
+fetchMLResultQB(usersTempArray);
+}else{
+    $('.spinner-border-div').hide();
+}
+
+}
+function fetchMLResultQB(usersIdArray){
+            var queryObj={};
+            queryObj.from="bqwxux68d";
+            queryObj.select=[3,6,7,8,9,10,11,12,13,14,15,20,21];
+            queryObj.sortBy=[{"fieldId":4,"order":"ASC"},{"fieldId":5,"order":"ASC"}];
+            queryObj.groupBy=[{"fieldId":6,"grouping":"equal-values"}];
+            queryObj.options={"skip":0,"top":0,"compareWithAppLocalTime":false};
+            queryObj.where=``;
+            console.log(usersIdArray.length)
+            var lastIndex=usersIdArray.length-1;
+            usersIdArray.forEach(function(i,j){    
+                queryObj.where +=`{3.EX.${i}}`;
+                console.log(j,lastIndex)
+                if(j!=lastIndex){
+                queryObj.where+=`OR`
+                }else{
+                    console.log('herer');
+                }
+            });
+            console.log('Query where='+queryObj.where);
+
+var settings = {
+              "url": "https://api.quickbase.com/v1/records/query",
+              "method": "POST",
+              "timeout": 0,
+              "headers": {
+                "Authorization": "QB-USER-TOKEN b5csc7_nqsg_bmfvitcdiif8xqhrx9cxm42y9y",
+                "QB-Realm-Hostname": "builderprogram-asingh8332.quickbase.com",
+                "Content-Type": "application/json"
+              },
+              "data": JSON.stringify(queryObj),
+            };
+            $.ajax(settings).done(function (response) {
+                console.log(response.data);
+                appendToMainResult(response.data);  
+            });
+
+}
+
+function appendToMainResult(dataArray){
+    
+    var responseS=[];
+    var stringSend='';
+    dataArray.forEach(function(i,j){
+                  var tempObj={};
+                  tempObj.title=i[10].value;
+                  tempObj.author={};
+                  tempObj.author.firstName=i[6].value;
+                  tempObj.location=i[13].value;
+                  tempObj.latitude=i[14].value;
+                  tempObj.longitude=i[15].value;
+                  tempObj.id=i[3].value;
+                  tempObj.pskill=i[20].value;
+                  tempObj.gexp=i[21].value;
+                  tempObj.cl=i[9].value;
+                  responseS.push(tempObj);
+        });
+        count=searchIdArray.length+1;
+        responseS.forEach(function(element,j){
+                    if(j<10){
+                    console.log('j Index=='+j); 
+                      //count++;
+                      console.log('Id='+element.id);
+                      if(searchIdArray.indexOf(element.id)==-1){
+                      stringSend+=`<tr class='ML_tr'><td class="ranktext">${count++}</td><td class="ranker_name">${element.author.firstName}</td><td>${element.pskill}</td><td class="rankerskill">${element.title}</td><td>${element.cl}</td><td>${element.gexp}</td><td>${element.location}</td><td><button class="button mt-3"  id='selectaction' onclick="selectAction(${element.id})"><span>Select </span></button><td></tr>`
+                      }else{
+                          console.log('=============================')
+                      }
+                    }
+                   });
+                   console.log(stringSend);
+                   if($('#results').html()!=''){
+                   if(stringSend!=''){
+                       $('#searchTable').append(stringSend);
+                   }
+                   }else{
+                   var stringSend_old = "<table class='table' id='searchTable'><tr><th>Rank</th><th>Name</th><th>Primary Skill</th><th>Secondary Skills</th><th>Career level</th><th>Interest</th><th>Location</th><th>Action</th></tr>";  
+                    $('#results').html(stringSend_old+stringSend);  
+                   }
+                   $('.spinner-border-div').hide();
+
+}
+
+
+function FetchMLCategoryResult(categoryResult){
+            var skill=$('#searchB').val();
+            var queryObj={};
+            queryObj.from="bqy9amz38";
+            queryObj.select=[3,6,7,8,9,10,11,12,13,14,15,20,21];
+            queryObj.sortBy=[{"fieldId":4,"order":"ASC"},{"fieldId":5,"order":"ASC"}];
+            queryObj.groupBy=[{"fieldId":6,"grouping":"equal-values"}];
+            queryObj.options={"skip":0,"top":0,"compareWithAppLocalTime":false};
+            queryObj.where =`{6.EX.${skill}}`;
+            
+            
+             var settings = {
+              "url": "https://api.quickbase.com/v1/records/query",
+              "method": "POST",
+              "timeout": 0,
+              "headers": {
+                "Authorization": "QB-USER-TOKEN b5csc7_nqsg_bmfvitcdiif8xqhrx9cxm42y9y",
+                "QB-Realm-Hostname": "builderprogram-asingh8332.quickbase.com",
+                "Content-Type": "application/json"
+              },
+              "data": JSON.stringify(queryObj),
+            };
+
+            $.ajax(settings).done(function (response) {
+                if(response.data.length>0){
+                    console.log(response.data[0]);
+                    var category=response.data[0][7].value;
+                }else{
+                    console.log('in here else');
+                    category='';
+                }
+                categoryResult(category);  
+            });
+    }
+function fetchUsersFromCategory(category,usersFromCategory){
+            var queryObj={};
+            queryObj.from="bqy56vwj2";
+            queryObj.select=[3,6,7,8,9,10,11,12,13,14,15,20,21];
+            queryObj.sortBy=[{"fieldId":4,"order":"ASC"},{"fieldId":5,"order":"ASC"}];
+            queryObj.groupBy=[{"fieldId":6,"grouping":"equal-values"}];
+            queryObj.options={"skip":0,"top":0,"compareWithAppLocalTime":false};
+            queryObj.where =`{21.EX.${category}}`;
+            
+            
+             var settings = {
+              "url": "https://api.quickbase.com/v1/records/query",
+              "method": "POST",
+              "timeout": 0,
+              "headers": {
+                "Authorization": "QB-USER-TOKEN b5csc7_nqsg_bmfvitcdiif8xqhrx9cxm42y9y",
+                "QB-Realm-Hostname": "builderprogram-asingh8332.quickbase.com",
+                "Content-Type": "application/json"
+              },
+              "data": JSON.stringify(queryObj),
+            };
+
+            $.ajax(settings).done(function (response) {
+                usersFromCategory(response.data);  
+            });
+    }
+
+    function manipulateCategoryUsersResult(jsonData,usersIdArray){
+        var usersTempArray = [];
+        if(jsonData.length>0){
+        jsonData.forEach(function(i){
+            console.log(i);
+            usersTempArray.push(i[6].value)
+            usersTempArray.push(i[7].value)
+        })
+        usersTempArray = usersTempArray.filter(onlyUnique);
+        usersIdArray(usersTempArray);
+        }else{
+            return [];
+            usersIdArray([])
+        }
+        console.log(usersTempArray);
+    }
+
+    function FetchMLBasedResultFromQB(){
+        $('.spinner-border-div').show();
+        setTimeout(function(){
+            FetchMLCategoryResult(function(category){
+            console.log(category);
+            if(category!=''){
+                fetchUsersFromCategory(category,function(usersCategoryArray){
+                    console.log(usersCategoryArray);
+                    manipulateCategoryUsersResult(usersCategoryArray,function(usersIdArray){
+                        console.log(usersIdArray);
+                        fetchMLResultQB(usersIdArray);
+                        $('.spinner-border-div').hide();
+                    });
+                    
+                })
+            }
+            })
+
+        },3000)
+        
+    }
+
+        
+    
+       
+        </script>
+    </body>
+</html>

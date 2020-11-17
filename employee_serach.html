@@ -1,0 +1,128 @@
+print('test')
+import pandas as pd
+import pyodide
+from xml.etree import ElementTree as ET
+import json
+import urllib.parse
+from js import document
+
+
+API_url = pyodide.open_url('https://builderprogram-asingh8332.quickbase.com/db/bqy56vwj2?a=API_DoQuery&clist=3.6.7.8.9.10.11.12.13.14.15.16.17.18.21&fmt=structured')
+data=API_url.read()
+root = ET.fromstring(data)
+header=[]
+for field in root.iter('field'):
+    label = field.find('label').text
+    header.append(label)
+print(header)
+
+list3=[]
+list6=[]
+list7=[]
+list8=[]
+list9=[]
+list10=[]
+list11=[]
+list12=[]
+list13=[]
+list14=[]
+list15=[]
+list16=[]
+list17=[]
+list18=[]
+list21=[]
+for field in root.iter('f'):
+    label = field.text
+    fid = field.attrib['id']
+    if fid=='3':
+        list3.append(label)
+    if fid=='6':
+        list6.append(label)
+    if fid=='7':
+        list7.append(label)
+    if fid=='8':
+        list8.append(label)
+    if fid=='9':
+        list9.append(label)
+    if fid=='10':
+        list10.append(label)
+    if fid=='11':
+        list11.append(label)
+    if fid=='12':
+        list12.append(label)
+    if fid=='13':
+        list13.append(label)
+    if fid=='14':
+        list14.append(label)
+    if fid=='15':
+        list15.append(label)
+    if fid=='16':
+        list16.append(label)
+    if fid=='17':
+        list17.append(label)
+    if fid=='18':
+        list18.append(label)
+    if fid=='21':
+        list21.append(label)
+		
+list_final=list(zip(list3,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16,list17,list18,list21))
+data=pd.DataFrame(list_final,columns = header)
+print('Table1:',data)
+Skills_API_url = pyodide.open_url('https://builderprogram-asingh8332.quickbase.com/db/bqy9amz38?a=API_DoQuery&clist=3.6.7&fmt=structured')
+Skills_data=Skills_API_url.read()
+root = ET.fromstring(Skills_data)
+header=[]
+for field in root.iter('field'):
+    label = field.find('label').text
+    header.append(label)
+print(header)
+
+list3=[]
+list6=[]
+list7=[]
+
+for field in root.iter('f'):
+    label = field.text
+    fid = field.attrib['id']
+    if fid=='3':
+        list3.append(label)
+    if fid=='6':
+        list6.append(label)
+    if fid=='7':
+        list7.append(label)
+Category_list=list(zip(list3,list6,list7))
+Category_skills=pd.DataFrame(Category_list,columns = header)
+print("table2:",Category_skills)
+print('headertable1:',data.columns)
+print('headertable2:',Category_skills.columns)
+skill_name= document.getElementById('searchB').value
+print(skill_name)
+Mentee_List=[]
+if (len(skill_name) >= 3):
+    skill_name=skill_name.upper()
+    Category_skills['Skills']=Category_skills['Skills'].str.upper()
+    Matched_Skills=Category_skills.loc[Category_skills['Skills']==skill_name,'Category']
+    #print(Matched_Skills)
+    Matched_Skills=Matched_Skills.drop_duplicates()
+    Matched_Skills=Matched_Skills.tolist()
+    Matched_Skills='\n'.join(Matched_Skills)
+    Rank_skill = 1
+    for i in range(0,len(data)):
+        if(data.loc[i, "Category"]==Matched_Skills):
+            full_skills = str(data["Mentee Primary Skill"][i]).upper() + ',' + str(data["Mentee Secondary Skills"][i]).upper()
+            print(full_skills)
+            Complete_data={"Mentor Id":data.loc[i,"Mentor Id"],"Mentee Id":data.loc[i,"Mentee Id"],"Mentee Name":data.loc[i,"Mentee Name"],"Mentee Primary Skill":data.loc[i,"Mentee Primary Skill"],"Mentee Secondary Skills":data.loc[i,"Mentee Secondary Skills"],"Mentee Career Level":data.loc[i,"Mentee Career Level"]}
+            Mentee_List.append(Complete_data)
+            if(skill_name in full_skills):
+                Rank = 1
+            else:
+                Rank_skill = Rank_skill + 1
+                Rank = Rank_skill
+            Rank_list={"Rank":Rank}
+            Complete_data.update(Rank_list)
+            Mentee_List.append(Complete_data)
+else:
+    Mentee_List=[]
+print(Mentee_List)
+json_data=json.dumps(Mentee_List)
+document.getElementById('textfield').innerHTML=json_data
